@@ -1,0 +1,200 @@
+#include <iostream>
+using namespace std;
+
+
+struct Birigui {
+	string TipoProblema[10], Urgencia[10], Horario[10];
+	int ContadorProblemas = 0;
+	};
+
+void Cadastro(Birigui loc[5][5], int& Tam) {
+	int PontoX, PontoY, urgencia;
+
+	cout << "Qual ponto voce registrara o problema?" << endl;
+	cout << "Ponto X (0 a 4): ";
+	cin >> PontoX;
+	cout << "Ponto Y (0 a 4): ";
+	cin >> PontoY;
+	int pos = loc[PontoX][PontoY].ContadorProblemas;
+	loc[PontoX][PontoY].ContadorProblemas++;
+	cout << "Qual problema deseja reportar: ";
+	cin >> loc[PontoX][PontoY].TipoProblema[pos];
+	system("cls");
+	cout << "Qual a urgencia do seu problema: " << endl << "[1] - normal" << endl << "[2] - prioridade" << endl << "[3] - prioridade maxima" << endl << "escolha: ";
+	cin >> urgencia;
+	switch (urgencia) {
+	case 1:
+		loc[PontoX][PontoY].Urgencia[pos] = "Normal";
+		break;
+	case 2:
+		loc[PontoX][PontoY].Urgencia[pos] = "Prioridade Media";
+		break;
+	case 3:
+		loc[PontoX][PontoY].Urgencia[pos] = "Prioridade Maxima";
+		break;
+	default:
+		cout << "opcao invalida!";
+		break;
+	}
+
+	cout << "Qual o horario da ocorrencia? (Manha, tarde, noite)" << endl;
+	cin >> loc[PontoX][PontoY].Horario[pos];
+
+	Tam++;
+	system("pause");
+	system("cls");
+}
+
+void QualP(Birigui loc[5][5], int tam) {
+	int PontoX, PontoY, cont;
+	cout << "Qual a localizacao da cidade que deseja averiguar?" << endl;
+	cout << endl << "Ponto X (0 a 4): ";
+	cin >> PontoX;
+	cout << "Ponto Y (0 a 4): ";
+	cin >> PontoY;
+	system("cls");
+	if (loc[PontoX][PontoY].ContadorProblemas != 0) {
+		cout << "Problemas relatados nessa cidade: " << endl;
+		for (cont = 0; cont < loc[PontoX][PontoY].ContadorProblemas; cont++) {
+			cout << "Tipo do problema: " << loc[PontoX][PontoY].TipoProblema[cont] << "   ";
+			cout << "Urgencia: " << loc[PontoX][PontoY].Urgencia[cont] << "   ";
+			cout << "Horario - " << loc[PontoX][PontoY].Horario[cont] << endl;
+
+
+		}
+	}
+	else {
+		cout << "Nao temos problemas nesse ponto!" << endl;
+	}
+	system("pause");
+	system("cls");
+}
+
+void Imprimir(Birigui loc[5][5], int tam) {
+	char Especificar;
+	for (int linha = 0; linha < 5; linha++) {
+		for (int coluna = 0; coluna < 5; coluna++) {
+			cout << loc[linha][coluna].ContadorProblemas << " ";
+		}
+		cout << endl;
+	}
+	cout << endl << "Temos no total " << tam << " problemas na cidade" << endl;
+
+	QualP(loc, tam);
+
+
+
+	system("pause");
+	system("cls");
+}
+
+void Solucionar(Birigui loc[5][5], int& tam) {
+	int PontoX, PontoY;
+
+
+	for (int linha = 0; linha < 5; linha++) {
+		for (int coluna = 0; coluna < 5; coluna++) {
+			cout << loc[linha][coluna].ContadorProblemas << " ";
+		}
+		cout << endl;
+	}
+
+	cout << endl << "Qual ponto voce quer solucionar o problema?" << endl;
+	cout << "Ponto X (0 a 4): ";
+	cin >> PontoX;
+	cout << "Ponto Y (0 a 4): ";
+	cin >> PontoY;
+
+	system("cls");
+
+	if (loc[PontoX][PontoY].ContadorProblemas > 0) {
+		cout << "--- Problemas no ponto (" << PontoX << ", " << PontoY << ") ---" << endl;
+
+		for (int cont = 0; cont < loc[PontoX][PontoY].ContadorProblemas; cont++) {
+			cout << "[" << cont + 1 << "] " << loc[PontoX][PontoY].TipoProblema[cont]
+				<< " - Urgencia: " << loc[PontoX][PontoY].Urgencia[cont] << endl;
+		}
+
+		int escolha;
+		cout << "\nDigite o numero do problema que deseja apagar/solucionar: ";
+		cin >> escolha;
+
+		int indice = escolha - 1;
+
+
+		if (indice >= 0 && indice < loc[PontoX][PontoY].ContadorProblemas) {
+
+
+			for (int i = indice; i < loc[PontoX][PontoY].ContadorProblemas - 1; i++) {
+				loc[PontoX][PontoY].TipoProblema[i] = loc[PontoX][PontoY].TipoProblema[i + 1];
+				loc[PontoX][PontoY].Urgencia[i] = loc[PontoX][PontoY].Urgencia[i + 1];
+			}
+
+
+			loc[PontoX][PontoY].ContadorProblemas--;
+			tam--;
+
+			cout << endl << "Problema solucionado e removido com sucesso!" << endl;
+		}
+		else {
+			cout << endl << "Opcao invalida!" << endl;
+		}
+	}
+	else {
+		cout << "Nao temos problemas nesse ponto!" << endl;
+	}
+
+	system("pause");
+	system("cls");
+}
+
+
+
+void Menu(Birigui loc[5][5]) {
+	int Opcao, Tam = 0;
+
+	for (int linha = 0; linha < 5; linha++) {
+		for (int coluna = 0; coluna < 5; coluna++) {
+			loc[linha][coluna].ContadorProblemas = 0;
+		}
+	}
+	do {
+
+		cout << "O que voce deseja fazer?" << endl;
+		cout << "[1] - Registrar um problema" << endl;
+		cout << "[2] - Ver os problemas da cidade" << endl;
+		cout << "[3] - Identificacao dos problemas" << endl;
+		cout << "[4] - Solucionar problemas" << endl;
+		cout << "[5] - Sair" << endl;
+		cout << "Digite sua escolha: ";
+		cin >> Opcao;
+		system("cls");
+		switch (Opcao) {
+		case 1:
+			Cadastro(loc, Tam);
+			break;
+		case 2:
+			Imprimir(loc, Tam);
+			break;
+		case 3:
+			QualP(loc, Tam);
+			break;
+		case 4:
+			Solucionar(loc, Tam);
+
+			break;
+		case 5:
+			cout << "sistema fechado, volte sempre!" << endl;
+			system("pause");
+			break;
+		default:
+			cout << "Opcao invalida";
+		}
+	} while (Opcao != 5);
+}
+
+int main() {
+	Birigui loc[5][5];
+	Menu(loc);
+
+}
